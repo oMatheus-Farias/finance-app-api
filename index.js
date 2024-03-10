@@ -6,7 +6,7 @@ import {
   makeDeleteUserController,
   makeGetUserByIdController,
   makeUpdateUserController,
-} from './src/factories/controller/user.js'
+} from './src/factories/controllers/user.js'
 
 const app = express()
 

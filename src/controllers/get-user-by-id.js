@@ -3,7 +3,7 @@ import {
   invalidIdResponse,
   checkIfIdIsValid,
   ok,
-  notFound,
+  userNotFoundResponse,
   serverError,
 } from './helpers/index.js'
 
@@ -13,7 +13,7 @@ export class GetUserByIdController {
       const isIdValid = checkIfIdIsValid(httpRequest.params.userId)
 
       if (!isIdValid) {
-        invalidIdResponse()
+        return invalidIdResponse()
       }
 
       const getUserByIdUseCase = new GetUserByIdUseCase()
@@ -21,9 +21,7 @@ export class GetUserByIdController {
       const user = await getUserByIdUseCase.execute(httpRequest.params.userId)
 
       if (!user) {
-        return notFound({
-          message: 'User not found.',
-        })
+        return userNotFoundResponse()
       }
 
       return ok(user)

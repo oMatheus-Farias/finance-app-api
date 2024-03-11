@@ -1,21 +1,11 @@
-import { UserNotFoundError } from '../../errors/user.js'
-
 export class UpdateTransactionUseCase {
-  constructor(updateTransactionRepository, getUserByIdRepository) {
+  constructor(updateTransactionRepository) {
     this.updateTransactionRepository = updateTransactionRepository
-    this.getUserByIdRepository = getUserByIdRepository
   }
 
-  async execute(updateTransactionParams) {
-    const user = await this.getUserByIdRepository.execute(
-      updateTransactionParams.userId,
-    )
-
-    if (!user) {
-      throw new UserNotFoundError()
-    }
-
+  async execute(transactionId, updateTransactionParams) {
     const transaction = await this.updateTransactionRepository.execute(
+      transactionId,
       updateTransactionParams,
     )
 

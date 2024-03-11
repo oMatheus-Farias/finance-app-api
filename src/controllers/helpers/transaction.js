@@ -2,12 +2,17 @@ import validator from 'validator'
 
 import { badRequest } from './index.js'
 
-export const checkIfAmountIsvalid = (amount) =>
-  validator.isCurrency(amount.toString(), {
+export const checkIfAmountIsvalid = (amount) => {
+  if (typeof amount !== 'number') {
+    return false
+  }
+
+  return validator.isCurrency(amount.toFixed(2), {
     digits_after_decimal: [2],
     allow_negatives: false,
     decimal_separator: '.',
   })
+}
 
 export const checkIfTypeIsValid = (type) =>
   ['EARNING', 'EXPENSE', 'INVESTMENT'].includes(type)

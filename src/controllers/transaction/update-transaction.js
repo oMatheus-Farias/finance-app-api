@@ -54,7 +54,7 @@ export class UpdateTransactionController {
       }
 
       const transaction = await this.updateTransactionUseCase.execute(
-        params.transactionId,
+        httpRequest.params.transactionId,
         params,
       )
 

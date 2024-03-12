@@ -8,6 +8,7 @@ import {
   makeUpdateUserController,
   makeCreateTransactionController,
   makeGetTransactionsByUserIdController,
+  makeUpdateTransactionController,
 } from './src/factories/controllers/index.js'
 
 const app = express()
@@ -67,3 +68,11 @@ app.post('/api/transactions', async (req, res) => {
 app.listen(process.env.PORT, () =>
   console.log(`listening on port ${process.env.PORT}`),
 )
+
+app.patch('/api/transactions/:transactionId', async (req, res) => {
+  const updateTransactionController = makeUpdateTransactionController()
+
+  const { statusCode, body } = await updateTransactionController.execute(req)
+
+  res.status(statusCode).json(body)
+})

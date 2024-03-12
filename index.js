@@ -9,6 +9,7 @@ import {
   makeCreateTransactionController,
   makeGetTransactionsByUserIdController,
   makeUpdateTransactionController,
+  makeDeleteTransactionConttroller,
 } from './src/factories/controllers/index.js'
 
 const app = express()
@@ -65,10 +66,6 @@ app.post('/api/transactions', async (req, res) => {
   res.status(statusCode).json(body)
 })
 
-app.listen(process.env.PORT, () =>
-  console.log(`listening on port ${process.env.PORT}`),
-)
-
 app.patch('/api/transactions/:transactionId', async (req, res) => {
   const updateTransactionController = makeUpdateTransactionController()
 
@@ -76,3 +73,15 @@ app.patch('/api/transactions/:transactionId', async (req, res) => {
 
   res.status(statusCode).json(body)
 })
+
+app.delete('/api/transactions/:transactionId', async (req, res) => {
+  const deleteTransactionController = makeDeleteTransactionConttroller()
+
+  const { statusCode, body } = await deleteTransactionController.execute(req)
+
+  res.status(statusCode).json(body)
+})
+
+app.listen(process.env.PORT, () =>
+  console.log(`listening on port ${process.env.PORT}`),
+)

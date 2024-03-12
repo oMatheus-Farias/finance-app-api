@@ -1,0 +1,67 @@
+import {
+  checkIfIdIsValid,
+  invalidIdResponse,
+  serverError,
+  badRequest,
+  checkIfAmountIsvalid,
+  invalidAmoundResponse,
+  checkIfTypeIsValid,
+  invalidTypeResponse,
+  ok,
+} from '../helpers/index.js'
+
+export class UpdateTransactionController {
+  constructor(updateTransactionUseCase) {
+    this.updateTransactionUseCase = updateTransactionUseCase
+  }
+
+  async execute(httpRequest) {
+    try {
+      const idIsValid = checkIfIdIsValid(httpRequest.params.transactionId)
+
+      if (!idIsValid) {
+        return invalidIdResponse()
+      }
+
+      const params = httpRequest.body
+
+      const allowedFields = ['name', 'date', 'amount', 'type']
+
+      const someFieldIsNotAllowed = Object.keys(params).some(
+        (field) => !allowedFields.includes(field),
+      )
+
+      if (someFieldIsNotAllowed) {
+        return badRequest({
+          message: 'Some provide field is not allowed.',
+        })
+      }
+
+      if (params.amount) {
+        const amountIsValid = checkIfAmountIsvalid(params.amount)
+
+        if (!amountIsValid) {
+          return invalidAmoundResponse()
+        }
+      }
+
+      if (params.type) {
+        const typeISValid = checkIfTypeIsValid(params.type)
+
+        if (!typeISValid) {
+          return invalidTypeResponse()
+        }
+      }
+
+      const transaction = await this.updateTransactionUseCase.execute(
+        params.transactionId,
+        params,
+      )
+
+      return ok(transaction)
+    } catch (error) {
+      console.error(error)
+      return serverError()
+    }
+  }
+}

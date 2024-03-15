@@ -41,7 +41,7 @@ export class UpdateUserController {
 
       if (error instanceof EmailAlreadyInUseError) {
         return badRequest({
-          message: error.errors[0].message,
+          message: error.message,
         })
       }
 

@@ -9,12 +9,14 @@ export class UpdateUserUseCase {
   }
 
   async execute(userId, updateUserParams) {
-    const userWithProvidedEmail = await this.getUserByEmailRepository.execute(
-      updateUserParams.email,
-    )
+    if (updateUserParams.email) {
+      const userWithProvidedEmail = await this.getUserByEmailRepository.execute(
+        updateUserParams.email,
+      )
 
-    if (userWithProvidedEmail && userWithProvidedEmail.id !== userId) {
-      throw new EmailAlreadyInUseError(updateUserParams.email)
+      if (userWithProvidedEmail && userWithProvidedEmail.id !== userId) {
+        throw new EmailAlreadyInUseError(updateUserParams.email)
+      }
     }
 
     const user = {

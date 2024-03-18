@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { DeleteTransactionController } from './delete-transaction.js'
 
 describe('Delete Transaction Controller', () => {
-  class DeleteTransactionControllerStub {
+  class DeleteTransactionUseCaseStub {
     async execute() {
       return {
         id: faker.string.uuid(),
@@ -16,10 +16,10 @@ describe('Delete Transaction Controller', () => {
   }
 
   const makeSut = () => {
-    const deleteTransactionController = new DeleteTransactionControllerStub()
-    const sut = new DeleteTransactionController(deleteTransactionController)
+    const deleteTransactionUseCase = new DeleteTransactionUseCaseStub()
+    const sut = new DeleteTransactionController(deleteTransactionUseCase)
 
-    return { deleteTransactionController, sut }
+    return { deleteTransactionUseCase, sut }
   }
 
   const httpRequest = {
@@ -49,10 +49,8 @@ describe('Delete Transaction Controller', () => {
   })
 
   it('should return 404 when transaction is not found', async () => {
-    const { deleteTransactionController, sut } = makeSut()
-    jest
-      .spyOn(deleteTransactionController, 'execute')
-      .mockResolvedValueOnce(null)
+    const { deleteTransactionUseCase, sut } = makeSut()
+    jest.spyOn(deleteTransactionUseCase, 'execute').mockResolvedValueOnce(null)
 
     const result = await sut.execute(httpRequest)
 
@@ -60,13 +58,23 @@ describe('Delete Transaction Controller', () => {
   })
 
   it('should return 500 when DeleteTransactionUseCase throws', async () => {
-    const { deleteTransactionController, sut } = makeSut()
+    const { deleteTransactionUseCase, sut } = makeSut()
     jest
-      .spyOn(deleteTransactionController, 'execute')
+      .spyOn(deleteTransactionUseCase, 'execute')
       .mockRejectedValueOnce(new Error())
 
     const result = await sut.execute(httpRequest)
 
     expect(result.statusCode).toBe(500)
+  })
+
+  it('should call DeleteTransactionUseCase with correct params', async () => {
+    const { deleteTransactionUseCase, sut } = makeSut()
+
+    const executeSpy = jest.spyOn(deleteTransactionUseCase, 'execute')
+
+    await sut.execute(httpRequest)
+
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.transactionId)
   })
 })

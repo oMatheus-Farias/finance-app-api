@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --passWithNoTests --silent --coverage",
     "prepare": "husky",
     "postinstall": "npx husky init && npx prisma generate",
     "start:dev": "node --watch index.js"

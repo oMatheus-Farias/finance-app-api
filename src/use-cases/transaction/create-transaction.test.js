@@ -133,4 +133,16 @@ describe('Create Transaction Use Case', () => {
 
         await expect(result).rejects.toThrow()
     })
+
+    it('should throw if CreateTransactionRepository throws', async () => {
+        const { sut, createTransactionRepositoryStub } = makeSut()
+        jest.spyOn(
+            createTransactionRepositoryStub,
+            'execute',
+        ).mockRejectedValueOnce(new Error())
+
+        const result = sut.execute(createTransactionParams)
+
+        await expect(result).rejects.toThrow()
+    })
 })

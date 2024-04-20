@@ -122,4 +122,15 @@ describe('Create Transaction Use Case', () => {
 
         await expect(result).rejects.toThrow()
     })
+
+    it('should throw if IdGeneratorAdapter throws', async () => {
+        const { sut, idGeneratorAdapter } = makeSut()
+        jest.spyOn(idGeneratorAdapter, 'execute').mockImplementationOnce(
+            new Error(),
+        )
+
+        const result = sut.execute(createTransactionParams)
+
+        await expect(result).rejects.toThrow()
+    })
 })

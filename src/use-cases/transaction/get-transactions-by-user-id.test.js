@@ -69,4 +69,16 @@ describe('Get Transactions By User Id Use Case', () => {
 
         await expect(result).rejects.toThrow()
     })
+
+    it('should throw if GetTransactionsByUserIdRepository throws', async () => {
+        const { sut, getTransactionsByUserIdRepositoryStub } = makeSut()
+        jest.spyOn(
+            getTransactionsByUserIdRepositoryStub,
+            'execute',
+        ).mockRejectedValueOnce(new Error())
+
+        const result = sut.execute(faker.string.uuid())
+
+        await expect(result).rejects.toThrow()
+    })
 })

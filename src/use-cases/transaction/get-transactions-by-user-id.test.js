@@ -47,4 +47,15 @@ describe('Get Transactions By User Id Use Case', () => {
 
         expect(result).toEqual([])
     })
+
+    it('should throw UserNotFoundError if user does not exist', async () => {
+        const { sut, getUserByIdRepositoryStub } = makeSut()
+        jest.spyOn(getUserByIdRepositoryStub, 'execute').mockReturnValueOnce(
+            null,
+        )
+
+        const result = sut.execute(faker.string.uuid())
+
+        await expect(result).rejects.toThrow()
+    })
 })

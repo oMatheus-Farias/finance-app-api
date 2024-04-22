@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { PostgresCreateUserRepository } from './create-user'
+import { prisma } from '../../../../prisma/prisma'
 
 describe('Create User Repository', () => {
     const createUserParams = {
@@ -30,5 +31,15 @@ describe('Create User Repository', () => {
         expect(result.last_name).toBe(createUserParams.last_name)
         expect(result.email).toBe(createUserParams.email)
         expect(result.password).toBe(createUserParams.password)
+    })
+
+    it('should throw if Prisma throws', async () => {
+        const { sut } = makeSut()
+
+        jest.spyOn(prisma.user, 'create').mockRejectedValueOnce(new Error())
+
+        const result = sut.execute(createUserParams)
+
+        await expect(result).rejects.toThrow()
     })
 })

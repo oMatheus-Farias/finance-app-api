@@ -109,4 +109,14 @@ describe('Get User Balance Repository', () => {
             },
         })
     })
+
+    it('should throw if Prisma throws', async () => {
+        jest.spyOn(prisma.transaction, 'aggregate').mockRejectedValueOnce(
+            new Error(),
+        )
+
+        const result = sut.execute(fakeUser.id)
+
+        await expect(result).rejects.toThrow()
+    })
 })

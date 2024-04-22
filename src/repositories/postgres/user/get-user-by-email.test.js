@@ -34,4 +34,12 @@ describe('Get User By Email Repository', () => {
             },
         })
     })
+
+    it('should throw if Prisma throws', async () => {
+        jest.spyOn(prisma.user, 'findUnique').mockRejectedValueOnce(new Error())
+
+        const result = sut.execute(fakeUser.email)
+
+        await expect(result).rejects.toThrow()
+    })
 })

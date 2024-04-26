@@ -2,6 +2,8 @@ import { faker } from '@faker-js/faker'
 import { PostgresDeleteTransactionRepository } from './delete-transaction.js'
 import { prisma } from '../../../../prisma/prisma.js'
 import dayjs from 'dayjs'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { TransactionNotFoundError } from '../../../errors/transaction.js'
 
 describe('Postgres Delete Transaction Repository', () => {
     const sut = new PostgresDeleteTransactionRepository()
@@ -74,5 +76,19 @@ describe('Postgres Delete Transaction Repository', () => {
         const response = sut.execute(transactionParams.id)
 
         await expect(response).rejects.toThrow()
+    })
+
+    it('should throw TransactionNotFoundError if Prisma throws TransactionNotFoundError', async () => {
+        jest.spyOn(prisma.transaction, 'delete').mockRejectedValueOnce(
+            new PrismaClientKnownRequestError('', {
+                code: 'P2025',
+            }),
+        )
+
+        const response = sut.execute(transactionParams.id)
+
+        await expect(response).rejects.toThrow(
+            new TransactionNotFoundError(transactionParams.id),
+        )
     })
 })

@@ -42,7 +42,7 @@ usersRouter.patch('/:userId', async (req, res) => {
     res.status(statusCode).json(body)
 })
 
-usersRouter.delete('/api/users/:userId', async (req, res) => {
+usersRouter.delete('/:userId', async (req, res) => {
     const deleteUserController = makeDeleteUserController()
 
     const { statusCode, body } = await deleteUserController.execute(req)

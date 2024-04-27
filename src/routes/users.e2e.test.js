@@ -128,4 +128,12 @@ describe('User Routes E2E Tests', () => {
 
         expect(result.status).toBe(200)
     })
+
+    it('GET /api/users/:userId should return 404 when user is not found', async () => {
+        const result = await request(app).get(
+            `/api/users/${faker.string.uuid()}`,
+        )
+
+        expect(result.status).toBe(404)
+    })
 })

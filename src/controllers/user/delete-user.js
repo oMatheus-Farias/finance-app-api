@@ -14,15 +14,15 @@ export class DeleteUserController {
 
     async execute(httpRequest) {
         try {
-            const isIdValid = checkIfIdIsValid(httpRequest.params.userId)
+            const userId = httpRequest.params.userId
+
+            const isIdValid = checkIfIdIsValid(userId)
 
             if (!isIdValid) {
                 return invalidIdResponse()
             }
 
-            const deletedUser = await this.deleteUserUseCase.execute(
-                httpRequest.params.userId,
-            )
+            const deletedUser = await this.deleteUserUseCase.execute(userId)
 
             return ok(deletedUser)
         } catch (error) {

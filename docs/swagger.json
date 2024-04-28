@@ -191,12 +191,58 @@
                     }
                 }
             }
+        },
+        "/api/transactions": {
+            "post": {
+                "summary": "Create a new transaction",
+                "tags": ["Transaction"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateTransactionParams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Transaction created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/Transaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidParam"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/UserNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/InternalServerError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "CreateUserParams": {
+        "User": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "9b5ea0a2-9291-4091-9c11-83d0b6cf83b0"
+                },
                 "first_name": {
                     "type": "string",
                     "example": "John"
@@ -215,13 +261,9 @@
                 }
             }
         },
-        "User": {
+        "CreateUserParams": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string",
-                    "example": "9b5ea0a2-9291-4091-9c11-83d0b6cf83b0"
-                },
                 "first_name": {
                     "type": "string",
                     "example": "John"
@@ -261,21 +303,77 @@
                 }
             }
         },
-        "InvalidParam": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid params"
-                }
-            }
-        },
         "UserNotFound": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
                     "example": "User not found"
+                }
+            }
+        },
+        "Transaction": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "9b5ea0a2-9291-4091-9c11-83d0b6cf83b0"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "9b5ea0a2-9291-4091-9c11-83d0b6cf83b0"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Salary"
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2024-01-01T00:00:00.000Z"
+                },
+                "amount": {
+                    "type": "string",
+                    "example": "1000"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "EARNING",
+                    "description": "EARNING, EXPENSE, INVESTMENT"
+                }
+            }
+        },
+        "CreateTransactionParams": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "string",
+                    "example": "9b5ea0a2-9291-4091-9c11-83d0b6cf83b0"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Salary"
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2024-01-01T00:00:00.000Z"
+                },
+                "amount": {
+                    "type": "number",
+                    "example": "1000"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "EARNING",
+                    "description": "EARNING, EXPENSE, INVESTMENT"
+                }
+            }
+        },
+        "InvalidParam": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid params"
                 }
             }
         },

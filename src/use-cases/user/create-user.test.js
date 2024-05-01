@@ -70,9 +70,9 @@ describe('Create User Use Case', () => {
     it('should throw an EmailAlreadyInUser if GetuserByEmailRepository returns a user', async () => {
         const { sut, getUserByEmailRepositoryStub } = makeSut()
 
-        jest.spyOn(getUserByEmailRepositoryStub, 'execute').mockReturnValueOnce(
-            user,
-        )
+        import.meta.jest
+            .spyOn(getUserByEmailRepositoryStub, 'execute')
+            .mockReturnValueOnce(user)
 
         const result = sut.execute(user)
 
@@ -85,8 +85,11 @@ describe('Create User Use Case', () => {
         const { sut, idGeneratorAdapterStub, createUserRepositoryStub } =
             makeSut()
 
-        const idGeneratorSpy = jest.spyOn(idGeneratorAdapterStub, 'execute')
-        const createUserRepositorySpy = jest.spyOn(
+        const idGeneratorSpy = import.meta.jest.spyOn(
+            idGeneratorAdapterStub,
+            'execute',
+        )
+        const createUserRepositorySpy = import.meta.jest.spyOn(
             createUserRepositoryStub,
             'execute',
         )
@@ -108,7 +111,7 @@ describe('Create User Use Case', () => {
             passwordHasherAdapterStub,
         } = makeSut()
 
-        const passwordHasherSpy = jest.spyOn(
+        const passwordHasherSpy = import.meta.jest.spyOn(
             passwordHasherAdapterStub,
             'execute',
         )
@@ -121,10 +124,9 @@ describe('Create User Use Case', () => {
     it('should throw if GetUserByEmailRepository throws', async () => {
         const { sut, getUserByEmailRepositoryStub } = makeSut()
 
-        jest.spyOn(
-            getUserByEmailRepositoryStub,
-            'execute',
-        ).mockRejectedValueOnce(new Error())
+        import.meta.jest
+            .spyOn(getUserByEmailRepositoryStub, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(user)
 
@@ -134,9 +136,9 @@ describe('Create User Use Case', () => {
     it('should throw if IdGeneratorAdapter throws', async () => {
         const { sut, idGeneratorAdapterStub } = makeSut()
 
-        jest.spyOn(idGeneratorAdapterStub, 'execute').mockImplementationOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(idGeneratorAdapterStub, 'execute')
+            .mockImplementationOnce(new Error())
 
         const result = sut.execute(user)
 
@@ -146,9 +148,9 @@ describe('Create User Use Case', () => {
     it('should throw if PasswordHashedAdapter throws', async () => {
         const { sut, passwordHasherAdapterStub } = makeSut()
 
-        jest.spyOn(passwordHasherAdapterStub, 'execute').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(passwordHasherAdapterStub, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(user)
 
@@ -158,9 +160,9 @@ describe('Create User Use Case', () => {
     it('should throw if CreateUserRepostory throws', async () => {
         const { sut, createUserRepositoryStub } = makeSut()
 
-        jest.spyOn(createUserRepositoryStub, 'execute').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(createUserRepositoryStub, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(user)
 

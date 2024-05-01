@@ -50,9 +50,9 @@ describe('Get Transactions By User Id Use Case', () => {
 
     it('should throw UserNotFoundError if user does not exist', async () => {
         const { sut, getUserByIdRepositoryStub } = makeSut()
-        jest.spyOn(getUserByIdRepositoryStub, 'execute').mockReturnValueOnce(
-            null,
-        )
+        import.meta.jest
+            .spyOn(getUserByIdRepositoryStub, 'execute')
+            .mockReturnValueOnce(null)
 
         const result = sut.execute(faker.string.uuid())
 
@@ -61,9 +61,9 @@ describe('Get Transactions By User Id Use Case', () => {
 
     it('should throw if GetUserByIdRepository throws', async () => {
         const { sut, getUserByIdRepositoryStub } = makeSut()
-        jest.spyOn(getUserByIdRepositoryStub, 'execute').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(getUserByIdRepositoryStub, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(faker.string.uuid())
 
@@ -72,10 +72,9 @@ describe('Get Transactions By User Id Use Case', () => {
 
     it('should throw if GetTransactionsByUserIdRepository throws', async () => {
         const { sut, getTransactionsByUserIdRepositoryStub } = makeSut()
-        jest.spyOn(
-            getTransactionsByUserIdRepositoryStub,
-            'execute',
-        ).mockRejectedValueOnce(new Error())
+        import.meta.jest
+            .spyOn(getTransactionsByUserIdRepositoryStub, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(faker.string.uuid())
 

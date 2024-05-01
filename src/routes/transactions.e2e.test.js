@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import request from 'supertest'
-import { app } from '../app.cjs'
+import { app } from '../app.js'
 import { TransactionType } from '@prisma/client'
 
 describe('Transaction Routes E2E Tests', () => {

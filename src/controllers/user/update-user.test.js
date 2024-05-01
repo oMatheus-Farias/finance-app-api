@@ -99,9 +99,9 @@ describe('Update User Controller', () => {
 
     it('should return 500 if UpdateUserUseCase throws an error', async () => {
         const { sut, updateUserUseCase } = makeSut()
-        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(updateUserUseCase, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = await sut.execute(httpRequest)
 
@@ -110,9 +110,11 @@ describe('Update User Controller', () => {
 
     it('should return 400 if UpdateUserUseCase throws an EmailAlreadyInUseError', async () => {
         const { sut, updateUserUseCase } = makeSut()
-        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
-            new EmailAlreadyInUseError(faker.internet.email()),
-        )
+        import.meta.jest
+            .spyOn(updateUserUseCase, 'execute')
+            .mockRejectedValueOnce(
+                new EmailAlreadyInUseError(faker.internet.email()),
+            )
 
         const result = await sut.execute(httpRequest)
 
@@ -121,7 +123,7 @@ describe('Update User Controller', () => {
 
     it('should call UpdateUserUseCase with correct params', async () => {
         const { updateUserUseCase, sut } = makeSut()
-        const executeSpy = jest.spyOn(updateUserUseCase, 'execute')
+        const executeSpy = import.meta.jest.spyOn(updateUserUseCase, 'execute')
 
         await sut.execute(httpRequest)
 
@@ -133,9 +135,9 @@ describe('Update User Controller', () => {
 
     it('should return 404 if UpdateUserUseCase throws an UserNotFoundError', async () => {
         const { sut, updateUserUseCase } = makeSut()
-        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(
-            new UserNotFoundError(faker.string.uuid()),
-        )
+        import.meta.jest
+            .spyOn(updateUserUseCase, 'execute')
+            .mockRejectedValueOnce(new UserNotFoundError(faker.string.uuid()))
 
         const result = await sut.execute(httpRequest)
 

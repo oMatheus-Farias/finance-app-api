@@ -64,7 +64,10 @@ describe('Update User Use Case', () => {
     it('should update user successfully (with email)', async () => {
         const { sut, getUserByEmailRepositoryStub } = makeSut()
 
-        const executeSpy = jest.spyOn(getUserByEmailRepositoryStub, 'execute')
+        const executeSpy = import.meta.jest.spyOn(
+            getUserByEmailRepositoryStub,
+            'execute',
+        )
         const userEmail = faker.internet.email()
 
         const result = await sut.execute(user.id, {
@@ -78,7 +81,10 @@ describe('Update User Use Case', () => {
     it('should update user successfully (with password)', async () => {
         const { sut, passwordHasherAdapter } = makeSut()
 
-        const executeSpy = jest.spyOn(passwordHasherAdapter, 'execute')
+        const executeSpy = import.meta.jest.spyOn(
+            passwordHasherAdapter,
+            'execute',
+        )
         const userPassword = faker.internet.password()
 
         const result = await sut.execute(user.id, {
@@ -92,9 +98,9 @@ describe('Update User Use Case', () => {
     it('should throw EmailAlreadyInUseError if email is already in use', async () => {
         const { sut, getUserByEmailRepositoryStub } = makeSut()
 
-        jest.spyOn(getUserByEmailRepositoryStub, 'execute').mockReturnValueOnce(
-            user,
-        )
+        import.meta.jest
+            .spyOn(getUserByEmailRepositoryStub, 'execute')
+            .mockReturnValueOnce(user)
 
         const result = sut.execute(faker.string.uuid(), {
             email: user.email,
@@ -107,7 +113,10 @@ describe('Update User Use Case', () => {
 
     it('should call UpdateUserRepository with correct params', async () => {
         const { sut, updateUserRepositoryStub } = makeSut()
-        const executeSpy = jest.spyOn(updateUserRepositoryStub, 'execute')
+        const executeSpy = import.meta.jest.spyOn(
+            updateUserRepositoryStub,
+            'execute',
+        )
 
         await sut.execute(user.id, {
             first_name: user.first_name,
@@ -126,10 +135,9 @@ describe('Update User Use Case', () => {
 
     it('should throw if GetUserByEmailRepository throws', async () => {
         const { sut, getUserByEmailRepositoryStub } = makeSut()
-        jest.spyOn(
-            getUserByEmailRepositoryStub,
-            'execute',
-        ).mockRejectedValueOnce(new Error())
+        import.meta.jest
+            .spyOn(getUserByEmailRepositoryStub, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(user.id, {
             email: user.email,
@@ -140,9 +148,9 @@ describe('Update User Use Case', () => {
 
     it('should throw if PasswordHasherAdapter throws', async () => {
         const { sut, passwordHasherAdapter } = makeSut()
-        jest.spyOn(passwordHasherAdapter, 'execute').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(passwordHasherAdapter, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(user.id, {
             password: user.password,
@@ -153,9 +161,9 @@ describe('Update User Use Case', () => {
 
     it('should throw if UpdateUserRepository throws', async () => {
         const { sut, updateUserRepositoryStub } = makeSut()
-        jest.spyOn(updateUserRepositoryStub, 'execute').mockRejectedValueOnce(
-            new Error(),
-        )
+        import.meta.jest
+            .spyOn(updateUserRepositoryStub, 'execute')
+            .mockRejectedValueOnce(new Error())
 
         const result = sut.execute(user.id, {
             first_name: faker.person.firstName(),

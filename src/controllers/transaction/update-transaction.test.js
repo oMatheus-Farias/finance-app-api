@@ -2,129 +2,137 @@ import { faker } from '@faker-js/faker'
 import { UpdateTransactionController } from './update-transaction.js'
 
 describe('Update Transaction Controller', () => {
-  class UpdateTransactionUseCaseStub {
-    async execute() {
-      return {
-        id: faker.string.uuid(),
-        user_id: faker.string.uuid(),
-        name: faker.commerce.productName(),
-        date: faker.date.anytime().toISOString(),
-        amount: Number(faker.finance.amount()),
-        type: faker.helpers.arrayElement(['EARNING', 'EXPENSE', 'INVESTMENT']),
-      }
+    class UpdateTransactionUseCaseStub {
+        async execute() {
+            return {
+                id: faker.string.uuid(),
+                user_id: faker.string.uuid(),
+                name: faker.commerce.productName(),
+                date: faker.date.anytime().toISOString(),
+                amount: Number(faker.finance.amount()),
+                type: faker.helpers.arrayElement([
+                    'EARNING',
+                    'EXPENSE',
+                    'INVESTMENT',
+                ]),
+            }
+        }
     }
-  }
 
-  const makeSut = () => {
-    const updateTransactionUseCase = new UpdateTransactionUseCaseStub()
-    const sut = new UpdateTransactionController(updateTransactionUseCase)
+    const makeSut = () => {
+        const updateTransactionUseCase = new UpdateTransactionUseCaseStub()
+        const sut = new UpdateTransactionController(updateTransactionUseCase)
 
-    return { updateTransactionUseCase, sut }
-  }
+        return { updateTransactionUseCase, sut }
+    }
 
-  const httpRequest = {
-    params: {
-      transactionId: faker.string.uuid(),
-    },
-    body: {
-      name: faker.commerce.productName(),
-      date: faker.date.anytime().toISOString(),
-      amount: Number(faker.finance.amount()),
-      type: faker.helpers.arrayElement(['EARNING', 'EXPENSE', 'INVESTMENT']),
-    },
-  }
+    const httpRequest = {
+        params: {
+            transactionId: faker.string.uuid(),
+        },
+        body: {
+            name: faker.commerce.productName(),
+            date: faker.date.anytime().toISOString(),
+            amount: Number(faker.finance.amount()),
+            type: faker.helpers.arrayElement([
+                'EARNING',
+                'EXPENSE',
+                'INVESTMENT',
+            ]),
+        },
+    }
 
-  it('should return 200 if update transaction is successfully', async () => {
-    const { sut } = makeSut()
+    it('should return 200 if update transaction is successfully', async () => {
+        const { sut } = makeSut()
 
-    const result = await sut.execute(httpRequest)
+        const result = await sut.execute(httpRequest)
 
-    expect(result.statusCode).toBe(200)
-  })
-
-  it('should retrun 400 if transactionId is invalid', async () => {
-    const { sut } = makeSut()
-
-    const result = await sut.execute({
-      params: {
-        transactionId: 'invalid_id',
-      },
-      body: {
-        ...httpRequest.body,
-      },
+        expect(result.statusCode).toBe(200)
     })
 
-    expect(result.statusCode).toBe(400)
-  })
+    it('should retrun 400 if transactionId is invalid', async () => {
+        const { sut } = makeSut()
 
-  it('should retrun 400 when unallowed field is provided', async () => {
-    const { sut } = makeSut()
+        const result = await sut.execute({
+            params: {
+                transactionId: 'invalid_id',
+            },
+            body: {
+                ...httpRequest.body,
+            },
+        })
 
-    const result = await sut.execute({
-      params: {
-        transactionId: faker.string.uuid(),
-      },
-      body: {
-        ...httpRequest.body,
-        unallowed_field: 'unallowed',
-      },
+        expect(result.statusCode).toBe(400)
     })
 
-    expect(result.statusCode).toBe(400)
-  })
+    it('should retrun 400 when unallowed field is provided', async () => {
+        const { sut } = makeSut()
 
-  it('should retrun 400 when amount field is invalid', async () => {
-    const { sut } = makeSut()
+        const result = await sut.execute({
+            params: {
+                transactionId: faker.string.uuid(),
+            },
+            body: {
+                ...httpRequest.body,
+                unallowed_field: 'unallowed',
+            },
+        })
 
-    const result = await sut.execute({
-      params: {
-        transactionId: faker.string.uuid(),
-      },
-      body: {
-        ...httpRequest.body,
-        amount: 'invalid_amount',
-      },
+        expect(result.statusCode).toBe(400)
     })
 
-    expect(result.statusCode).toBe(400)
-  })
+    it('should retrun 400 when amount field is invalid', async () => {
+        const { sut } = makeSut()
 
-  it('should retrun 400 when type field is invalid', async () => {
-    const { sut } = makeSut()
+        const result = await sut.execute({
+            params: {
+                transactionId: faker.string.uuid(),
+            },
+            body: {
+                ...httpRequest.body,
+                amount: 'invalid_amount',
+            },
+        })
 
-    const result = await sut.execute({
-      params: {
-        transactionId: faker.string.uuid(),
-      },
-      body: {
-        ...httpRequest.body,
-        type: 'INVALID_TYPE',
-      },
+        expect(result.statusCode).toBe(400)
     })
 
-    expect(result.statusCode).toBe(400)
-  })
+    it('should retrun 400 when type field is invalid', async () => {
+        const { sut } = makeSut()
 
-  it('should return 500 if UpdateTransactionUseCase throws', async () => {
-    const { sut, updateTransactionUseCase } = makeSut()
-    jest
-      .spyOn(updateTransactionUseCase, 'execute')
-      .mockRejectedValueOnce(new Error())
+        const result = await sut.execute({
+            params: {
+                transactionId: faker.string.uuid(),
+            },
+            body: {
+                ...httpRequest.body,
+                type: 'INVALID_TYPE',
+            },
+        })
 
-    const result = await sut.execute(httpRequest)
+        expect(result.statusCode).toBe(400)
+    })
 
-    expect(result.statusCode).toBe(500)
-  })
+    it('should return 500 if UpdateTransactionUseCase throws', async () => {
+        const { sut, updateTransactionUseCase } = makeSut()
+        jest.spyOn(updateTransactionUseCase, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
 
-  it('should call UpdateTransactionUseCase with correct params', async () => {
-    const { sut, updateTransactionUseCase } = makeSut()
-    const executeSpy = jest.spyOn(updateTransactionUseCase, 'execute')
+        const result = await sut.execute(httpRequest)
 
-    await sut.execute(httpRequest)
+        expect(result.statusCode).toBe(500)
+    })
 
-    expect(executeSpy).toHaveBeenCalledWith(
-      httpRequest.params.transactionId,
-      httpRequest.body,
-    )
-  })
+    it('should call UpdateTransactionUseCase with correct params', async () => {
+        const { sut, updateTransactionUseCase } = makeSut()
+        const executeSpy = jest.spyOn(updateTransactionUseCase, 'execute')
+
+        await sut.execute(httpRequest)
+
+        expect(executeSpy).toHaveBeenCalledWith(
+            httpRequest.params.transactionId,
+            httpRequest.body,
+        )
+    })
 })

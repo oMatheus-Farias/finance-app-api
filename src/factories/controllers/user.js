@@ -1,98 +1,98 @@
 import {
-  GetUserByIdController,
-  CreateUserController,
-  UpdateUserController,
-  DeleteUserController,
-  GetUserBalanceController,
+    GetUserByIdController,
+    CreateUserController,
+    UpdateUserController,
+    DeleteUserController,
+    GetUserBalanceController,
 } from '../../controllers/index.js'
 
 import {
-  PostgresGetUserByIdRepository,
-  PostgresGetUserByEmailRepository,
-  PostgresCreateUserRepository,
-  PostgresUpdateUserRepository,
-  PostgresDeleteUserRepository,
-  PostgresGetUserBalanceRepository,
+    PostgresGetUserByIdRepository,
+    PostgresGetUserByEmailRepository,
+    PostgresCreateUserRepository,
+    PostgresUpdateUserRepository,
+    PostgresDeleteUserRepository,
+    PostgresGetUserBalanceRepository,
 } from '../../repositories/postgres/index.js'
 
 import {
-  GetUserByIdUseCase,
-  CreateUserUseCase,
-  UpdateUserUseCase,
-  DeleteUserUseCase,
-  GetUserBalanceUseCase,
+    GetUserByIdUseCase,
+    CreateUserUseCase,
+    UpdateUserUseCase,
+    DeleteUserUseCase,
+    GetUserBalanceUseCase,
 } from '../../use-cases/index.js'
 import {
-  IdGeneratorAdapter,
-  PasswordHasherAdapter,
+    IdGeneratorAdapter,
+    PasswordHasherAdapter,
 } from '../../adapters/index.js'
 
 export const makeGetUserByIdController = () => {
-  const getUserByIdRepository = new PostgresGetUserByIdRepository()
+    const getUserByIdRepository = new PostgresGetUserByIdRepository()
 
-  const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository)
+    const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository)
 
-  const getUserByIdController = new GetUserByIdController(getUserByIdUseCase)
+    const getUserByIdController = new GetUserByIdController(getUserByIdUseCase)
 
-  return getUserByIdController
+    return getUserByIdController
 }
 
 export const makeCreateUserController = () => {
-  const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
-  const createUserRepository = new PostgresCreateUserRepository()
-  const passwordHasherAdapter = new PasswordHasherAdapter()
-  const idGeneratorAdapter = new IdGeneratorAdapter()
+    const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
+    const createUserRepository = new PostgresCreateUserRepository()
+    const passwordHasherAdapter = new PasswordHasherAdapter()
+    const idGeneratorAdapter = new IdGeneratorAdapter()
 
-  const createUserUseCase = new CreateUserUseCase(
-    getUserByEmailRepository,
-    createUserRepository,
-    passwordHasherAdapter,
-    idGeneratorAdapter,
-  )
+    const createUserUseCase = new CreateUserUseCase(
+        getUserByEmailRepository,
+        createUserRepository,
+        passwordHasherAdapter,
+        idGeneratorAdapter,
+    )
 
-  const createUserController = new CreateUserController(createUserUseCase)
+    const createUserController = new CreateUserController(createUserUseCase)
 
-  return createUserController
+    return createUserController
 }
 
 export const makeUpdateUserController = () => {
-  const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
-  const updateUserRepository = new PostgresUpdateUserRepository()
-  const passwordHasherAdapter = new PasswordHasherAdapter()
+    const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
+    const updateUserRepository = new PostgresUpdateUserRepository()
+    const passwordHasherAdapter = new PasswordHasherAdapter()
 
-  const updateUserUseCase = new UpdateUserUseCase(
-    getUserByEmailRepository,
-    updateUserRepository,
-    passwordHasherAdapter,
-  )
+    const updateUserUseCase = new UpdateUserUseCase(
+        getUserByEmailRepository,
+        updateUserRepository,
+        passwordHasherAdapter,
+    )
 
-  const updateUserController = new UpdateUserController(updateUserUseCase)
+    const updateUserController = new UpdateUserController(updateUserUseCase)
 
-  return updateUserController
+    return updateUserController
 }
 
 export const makeDeleteUserController = () => {
-  const deleteUserRepository = new PostgresDeleteUserRepository()
+    const deleteUserRepository = new PostgresDeleteUserRepository()
 
-  const deleteUserUseCase = new DeleteUserUseCase(deleteUserRepository)
+    const deleteUserUseCase = new DeleteUserUseCase(deleteUserRepository)
 
-  const deleteUserController = new DeleteUserController(deleteUserUseCase)
+    const deleteUserController = new DeleteUserController(deleteUserUseCase)
 
-  return deleteUserController
+    return deleteUserController
 }
 
 export const makeGetUserBalanceController = () => {
-  const getUserBalanceRepository = new PostgresGetUserBalanceRepository()
-  const getUserByIdRepository = new PostgresGetUserByIdRepository()
+    const getUserBalanceRepository = new PostgresGetUserBalanceRepository()
+    const getUserByIdRepository = new PostgresGetUserByIdRepository()
 
-  const getUserBalanceUseCase = new GetUserBalanceUseCase(
-    getUserBalanceRepository,
-    getUserByIdRepository,
-  )
+    const getUserBalanceUseCase = new GetUserBalanceUseCase(
+        getUserBalanceRepository,
+        getUserByIdRepository,
+    )
 
-  const getUserBalanceController = new GetUserBalanceController(
-    getUserBalanceUseCase,
-  )
+    const getUserBalanceController = new GetUserBalanceController(
+        getUserBalanceUseCase,
+    )
 
-  return getUserBalanceController
+    return getUserBalanceController
 }

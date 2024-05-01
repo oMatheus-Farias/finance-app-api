@@ -1,14 +1,14 @@
 export class UpdateTransactionUseCase {
-  constructor(updateTransactionRepository) {
-    this.updateTransactionRepository = updateTransactionRepository
-  }
+    constructor(updateTransactionRepository) {
+        this.updateTransactionRepository = updateTransactionRepository
+    }
 
-  async execute(transactionId, updateTransactionParams) {
-    const transaction = await this.updateTransactionRepository.execute(
-      transactionId,
-      updateTransactionParams,
-    )
+    async execute(transactionId, updateTransactionParams) {
+        const transaction = await this.updateTransactionRepository.execute(
+            transactionId,
+            updateTransactionParams,
+        )
 
-    return transaction
-  }
+        return transaction
+    }
 }

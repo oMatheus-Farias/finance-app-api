@@ -2,73 +2,75 @@ import { faker } from '@faker-js/faker'
 import { GetUserByIdController } from './get-user-by-id.js'
 
 describe('Get User By Id Controller', () => {
-  class GetUserByIdUseCaseStub {
-    async execute() {
-      return {
-        id: faker.string.uuid(),
-        first_name: faker.person.firstName(),
-        last_name: faker.person.lastName(),
-        email: faker.internet.email(),
-        password: faker.internet.password({
-          length: 7,
-        }),
-      }
+    class GetUserByIdUseCaseStub {
+        async execute() {
+            return {
+                id: faker.string.uuid(),
+                first_name: faker.person.firstName(),
+                last_name: faker.person.lastName(),
+                email: faker.internet.email(),
+                password: faker.internet.password({
+                    length: 7,
+                }),
+            }
+        }
     }
-  }
 
-  const makeSut = () => {
-    const getUserByIdUseCase = new GetUserByIdUseCaseStub()
-    const sut = new GetUserByIdController(getUserByIdUseCase)
+    const makeSut = () => {
+        const getUserByIdUseCase = new GetUserByIdUseCaseStub()
+        const sut = new GetUserByIdController(getUserByIdUseCase)
 
-    return { getUserByIdUseCase, sut }
-  }
+        return { getUserByIdUseCase, sut }
+    }
 
-  const httpRequest = {
-    params: {
-      userId: faker.string.uuid(),
-    },
-  }
+    const httpRequest = {
+        params: {
+            userId: faker.string.uuid(),
+        },
+    }
 
-  it('should return 200 if a user if found', async () => {
-    const { sut } = makeSut()
+    it('should return 200 if a user if found', async () => {
+        const { sut } = makeSut()
 
-    const result = await sut.execute(httpRequest)
+        const result = await sut.execute(httpRequest)
 
-    expect(result.statusCode).toBe(200)
-  })
+        expect(result.statusCode).toBe(200)
+    })
 
-  it('should return 400 if an invalid id is provided', async () => {
-    const { sut } = makeSut()
+    it('should return 400 if an invalid id is provided', async () => {
+        const { sut } = makeSut()
 
-    const result = await sut.execute({ params: { userId: 'invalid_id' } })
+        const result = await sut.execute({ params: { userId: 'invalid_id' } })
 
-    expect(result.statusCode).toBe(400)
-  })
+        expect(result.statusCode).toBe(400)
+    })
 
-  it('should return 404 if a user is not found', async () => {
-    const { getUserByIdUseCase, sut } = makeSut()
-    jest.spyOn(getUserByIdUseCase, 'execute').mockResolvedValueOnce(null)
+    it('should return 404 if a user is not found', async () => {
+        const { getUserByIdUseCase, sut } = makeSut()
+        jest.spyOn(getUserByIdUseCase, 'execute').mockResolvedValueOnce(null)
 
-    const result = await sut.execute(httpRequest)
+        const result = await sut.execute(httpRequest)
 
-    expect(result.statusCode).toBe(404)
-  })
+        expect(result.statusCode).toBe(404)
+    })
 
-  it('should return 500 if GetUserByIdUseCase throws an error', async () => {
-    const { getUserByIdUseCase, sut } = makeSut()
-    jest.spyOn(getUserByIdUseCase, 'execute').mockRejectedValueOnce(new Error())
+    it('should return 500 if GetUserByIdUseCase throws an error', async () => {
+        const { getUserByIdUseCase, sut } = makeSut()
+        jest.spyOn(getUserByIdUseCase, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
 
-    const result = await sut.execute(httpRequest)
+        const result = await sut.execute(httpRequest)
 
-    expect(result.statusCode).toBe(500)
-  })
+        expect(result.statusCode).toBe(500)
+    })
 
-  it('should call GetUserByIdUseCase with correct params', async () => {
-    const { getUserByIdUseCase, sut } = makeSut()
-    const executeSpy = jest.spyOn(getUserByIdUseCase, 'execute')
+    it('should call GetUserByIdUseCase with correct params', async () => {
+        const { getUserByIdUseCase, sut } = makeSut()
+        const executeSpy = jest.spyOn(getUserByIdUseCase, 'execute')
 
-    await sut.execute(httpRequest)
+        await sut.execute(httpRequest)
 
-    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.userId)
-  })
+        expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.userId)
+    })
 })
